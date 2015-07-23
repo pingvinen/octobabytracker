@@ -1,0 +1,16 @@
+{
+	"name": "pingvinen/octobabytracker",
+	"description": "Tracking what my baby does",
+	"license": "proprietary",
+
+	"minimum-stability": "stable",
+
+	"require": {
+		  "anneks/rightaboutnow": "dev-master"
+		, "php": ">=5.4.0"
+		, "ext-pdo_mysql": "*"
+	},
+
+	"require-dev": {
+	}
+}

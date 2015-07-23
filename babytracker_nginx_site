@@ -1,0 +1,24 @@
+server {
+	listen       80;
+	server_name  babytracker.localhost;
+	root         /home/pingvinen/gitclones/me/octobabytracker/src/public;
+
+
+	location /assets {
+		autoindex on;
+		sendfile off;
+		alias /home/pingvinen/gitclones/me/octobabytracker/src/public/assets;
+
+	}
+
+	location / {
+		fastcgi_connect_timeout 3s;     # default of 60s is just too long
+		fastcgi_read_timeout 10s;       # default of 60s is just too long
+		include fastcgi_params;
+		fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+		fastcgi_index index.php;
+		try_files $uri $uri/ /index.php?$args;
+		index index.php;
+		fastcgi_pass 127.0.0.1:9000;    # assumes you are running php-fpm locally on port 9000
+	}
+}
