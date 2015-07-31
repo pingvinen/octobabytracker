@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/anneks/rightaboutnow.git",
-                "reference": "c157c6cc0196216b35d1eeafd18feb03b8ad2e45"
+                "reference": "3cd7ad1683b011c391c27515869505659a616ace"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/anneks/rightaboutnow/zipball/c157c6cc0196216b35d1eeafd18feb03b8ad2e45",
-                "reference": "c157c6cc0196216b35d1eeafd18feb03b8ad2e45",
+                "url": "https://api.github.com/repos/anneks/rightaboutnow/zipball/3cd7ad1683b011c391c27515869505659a616ace",
+                "reference": "3cd7ad1683b011c391c27515869505659a616ace",
                 "shasum": ""
             },
             "require": {
@@ -34,7 +34,7 @@
                 "proprietary"
             ],
             "description": "Web framework built on top of Slim",
-            "time": "2015-06-07 14:51:47"
+            "time": "2015-07-31 12:01:26"
         },
         {
             "name": "slim/slim",
