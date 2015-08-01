@@ -13,7 +13,7 @@ class DiaperAmount
 		switch ($amount)
 		{
 			case self::NONE:
-				return '';
+				return 'None';
 
 			case self::A_LITTLE:
 				return 'A little';
@@ -29,5 +29,16 @@ class DiaperAmount
 		}
 
 		return '';
+	}
+
+	public static function all()
+	{
+		return array(
+			  self::NONE
+			, self::A_LITTLE
+			, self::SOME
+			, self::WOW
+			, self::HOLY_CRAP
+		);
 	}
 }

@@ -15,7 +15,10 @@
 	<link href="/assets/css/normalize.css" rel="stylesheet">
 	<link href="/assets/css/bootstrap.min.css" rel="stylesheet">
 	<link href="/assets/css/bootstrap-theme.min.css" rel="stylesheet">
+	<link href="/assets/css/jquery-ui.min.css" rel="stylesheet">
 	<link href="/assets/css/public.css" rel="stylesheet">
+
+	<?php $this->outputOptionalBlock('head'); ?>
 
 	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
@@ -39,6 +42,16 @@
 	</div>
 </div>
 
+<script src="/assets/js/external/jquery-2.1.4.min.js"></script>
+<script src="/assets/js/external/jquery-ui.min.js"></script>
+<script src="/assets/js/fixbrowserinconsistencies.js"></script>
+<script src="/assets/js/lib/viewport.js"></script>
+<script src="/assets/js/lib/ajax.js"></script>
+<script src="/assets/js/lib/form.js"></script>
+
+<script src="/assets/js/pages/layout-before.js"></script>
 <?php $this->outputOptionalBlock('scripts'); ?>
+<script src="/assets/js/pages/layout-after.js"></script>
+<script src="/assets/js/ajaxify-forms.js"></script>
 </body>
 </html>

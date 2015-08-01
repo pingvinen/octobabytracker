@@ -2,6 +2,9 @@
 
 class Feeding
 {
+	const STATUS_InProgress = 'inprogress';
+	const STATUS_Finalized = 'finalized';
+
 	/**
 	 * @var string
 	 */
@@ -11,6 +14,11 @@ class Feeding
 	 * @var DateTime
 	 */
 	private $dateTime;
+
+	/**
+	 * @var string
+	 */
+	private $status;
 
 	/**
 	 * Time on left breast in minutes
@@ -129,8 +137,42 @@ class Feeding
 		$this->milking = $milking;
 	}
 
+	public function getStatus()
+	{
+		return $this->status;
+	}
+
+	/**
+	 * Use the STATUS_ constants on this class
+	 * @param $status
+	 */
+	public function setStatus($status)
+	{
+		$this->status = $status;
+	}
+
 	public function hasBottle()
 	{
 		return !is_null($this->bottle);
+	}
+
+	public function hasBreastFeeding()
+	{
+		return !is_null($this->breastLeft) || !is_null($this->breastRight);
+	}
+
+	public function hasMilking()
+	{
+		return !is_null($this->milking);
+	}
+
+	public function hasDiaper()
+	{
+		return !is_null($this->pee) || !is_null($this->poo);
+	}
+
+	public function hasId()
+	{
+		return !is_null($this->id);
 	}
 }
