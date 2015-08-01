@@ -22,10 +22,24 @@ class IndexController
 
 	public function execute(IWebRequest $request, IWebResponse $response)
 	{
-		$this->model->setTitle('Track it baby!');
+		$feeding = $this->feedingRepository->getInProgress();
 
-		$this->model->setFeedings($this->feedingRepository->getAll());
-
+		if ($feeding->hasBottle())
+		{
+			$response->redirect('/bottle');
+		}
+		else if ($feeding->hasMilking())
+		{
+			$response->redirect('/milking');
+		}
+		else if ($feeding->hasBreastFeeding())
+		{
+			$response->redirect('/breast');
+		}
+		else if ($feeding->hasDiaper())
+		{
+			$response->redirect('/diaper');
+		}
 
 		return $this->model;
 	}

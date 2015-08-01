@@ -6,46 +6,30 @@
 <?php $this->setBlock('body', function() use ($model) { ?>
 	<?php /** @var $this HtmlSlimView */ ?>
 	<div id="index">
-		Track that baby!!
 
-		<table>
-			<thead>
-				<tr>
-					<th>id</th>
-					<th>datetime</th>
-					<th>left</th>
-					<th>right</th>
-					<th>bottle</th>
-					<th>milking</th>
-					<th>pee</th>
-					<th>poo</th>
-				</tr>
-			</thead>
+		<div class="row">
+			<div class="col-md-6">
+				<a href="/diaper" class="btn btn-primary btn-lg btn-block">Diaper</a>
+			</div>
 
-			<tbody>
-			<?php foreach($model->getFeedings()->getIterator() as $feeding): ?>
-				<?php
-					$bType = '';
-					$bAmount = '';
-					if ($feeding->hasBottle())
-					{
-						$bType = $feeding->getBottle()->getType() == Bottle::TYPE_MILK ? 'milk' : 'formula';
-						$bAmount = $feeding->getBottle()->getAmount() . ' mL';
-					}
-				?>
+			<div class="col-md-6">
+				<a href="/milking" class="btn btn-primary btn-lg btn-block">Milking</a>
+			</div>
+		</div>
 
-				<tr>
-					<td><?php echo $feeding->getId() ?></td>
-					<td><?php echo $feeding->getDateTime()->format('Y-m-d H:i') ?></td>
-					<td><?php echo $feeding->getBreastLeft() ?> minutes</td>
-					<td><?php echo $feeding->getBreastRight() ?> minutes</td>
-					<td><?php echo $bType ?> <?php echo $bAmount ?></td>
-					<td><?php echo $feeding->getMilking() ?> mL</td>
-					<td><?php echo DiaperAmount::asString($feeding->getPee()) ?></td>
-					<td><?php echo DiaperAmount::asString($feeding->getPoo()) ?></td>
-				</tr>
-			<?php endforeach; ?>
-			</tbody>
-		</table>
+		<div class="row visible-lg">
+			<div class="col-md-12"><br><br></div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<a href="/bottle" class="btn btn-primary btn-lg btn-block">Bottle</a>
+			</div>
+
+			<div class="col-md-6">
+				<a href="/breast" class="btn btn-primary btn-lg btn-block">Breast</a>
+			</div>
+		</div>
+
 	</div>
 <?php }) ?>
