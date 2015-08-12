@@ -8,11 +8,11 @@
 	<div id="index">
 
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-sm-6">
 				<a href="/diaper" class="btn btn-primary btn-lg btn-block">Diaper</a>
 			</div>
 
-			<div class="col-md-6">
+			<div class="col-sm-6">
 				<a href="/milking" class="btn btn-primary btn-lg btn-block">Milking</a>
 			</div>
 		</div>
@@ -22,11 +22,11 @@
 		</div>
 
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-sm-6">
 				<a href="/bottle" class="btn btn-primary btn-lg btn-block">Bottle</a>
 			</div>
 
-			<div class="col-md-6">
+			<div class="col-sm-6">
 				<a href="/breast" class="btn btn-primary btn-lg btn-block">Breast</a>
 			</div>
 		</div>
