@@ -98,8 +98,9 @@ class FeedingRepository
 
 		if (!empty($row['bottle']))
 		{
-			$type = $row['bottle'][0];
-			$x->setBottle(new Bottle($type, substr($row['bottle'], 1)));
+			$bottle = new Bottle(Bottle::TYPE_MILK, 0);
+			$bottle->decode($row['bottle']);
+			$x->setBottle($bottle);
 		}
 
 		return $x;
@@ -145,7 +146,7 @@ class FeedingRepository
 				, 'milking' => $feeding->getMilking()
 				, 'pee' => $feeding->getPee()
 				, 'poo' => $feeding->getPoo()
-				, 'bottle' => $feeding->getBottle()
+				, 'bottle' => $feeding->hasBottle() ? $feeding->getBottle()->encode() : null
 			)
 		);
 	}
@@ -178,7 +179,7 @@ class FeedingRepository
 				, 'milking' => $feeding->getMilking()
 				, 'pee' => $feeding->getPee()
 				, 'poo' => $feeding->getPoo()
-				, 'bottle' => $feeding->getBottle()
+				, 'bottle' => $feeding->hasBottle() ? $feeding->getBottle()->encode() : null
 			)
 		);
 

@@ -9,6 +9,10 @@
 			$('#alertBoxContainer').append(
 				$('<div></div>').addClass('alert alert-error').html(message)
 			);
+
+			if (message.stackTrace) {
+				console.log(message.stackTrace);
+			}
 		});
 
 		/**
