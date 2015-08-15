@@ -19,7 +19,7 @@ abstract class InputPostControllerBase
 
 	public function execute(IWebRequest $request, IWebResponse $response)
 	{
-		//DebugLog::separator(); DebugLog::log($request->postAll());
+		DebugLog::separator(); DebugLog::log($request->postAll());
 
 		$feeding = $this->feedingRepository->getInProgressOrNew();
 
