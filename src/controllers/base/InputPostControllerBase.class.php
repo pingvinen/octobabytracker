@@ -1,18 +1,15 @@
 <?php
 
-/**
- * @route POST /diaper
- */
-class DiaperPostController
+abstract class InputPostControllerBase
 {
 	/**
 	 * @var InputAjaxViewModel
 	 */
-	private $model;
+	protected $model;
 	/**
 	 * @var FeedingRepository
 	 */
-	private $feedingRepository;
+	protected $feedingRepository;
 
 	public function __construct(InputAjaxViewModel $model, FeedingRepository $feedingRepository)
 	{
@@ -22,12 +19,11 @@ class DiaperPostController
 
 	public function execute(IWebRequest $request, IWebResponse $response)
 	{
-		DebugLog::log($request->postAll());
+		//DebugLog::separator(); DebugLog::log($request->postAll());
 
 		$feeding = $this->feedingRepository->getInProgressOrNew();
 
-		$feeding->setPee($request->post('pee', $feeding->getPee()));
-		$feeding->setPoo($request->post('poo', $feeding->getPoo()));
+		$this->executeInner($request, $response, $feeding);
 
 		if ($request->post('docommit', false))
 		{
@@ -39,4 +35,6 @@ class DiaperPostController
 
 		return $this->model;
 	}
+
+	protected abstract function executeInner(IWebRequest $request, IWebResponse $response, Feeding $feeding);
 }
