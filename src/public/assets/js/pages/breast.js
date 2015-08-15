@@ -54,6 +54,7 @@
 
 		$elm.removeClass('btn-primary').addClass('btn-success');
 
+		window.breastForm_onChange();
 		start();
 	}
 
@@ -96,7 +97,10 @@
 
 		window.breastForm_onChange = function(e) {
 			totalSeconds = $totalMinutes.val() * 60;
-			window.breastForm_form.submit();
+
+			if (window.breastForm_form) { // if called during "boot", the form may not be defined yet as ajaxify runs after this script
+				window.breastForm_form.submit();
+			}
 		};
 
 		window.breastForm_onAfterSubmit = function(responseBody) {
@@ -111,7 +115,7 @@
 		$play.on('click', start);
 
 		$pause.attr('disabled', 'disabled');
-		$play.parent().hide();
+		$play.parent().hide().removeClass('hidden'); // the "hidden" class prevents "blink" on page load
 
 		if ($totalMinutes.val() > 0) {
 			updateTotalSeconds($totalMinutes.val() * 60);

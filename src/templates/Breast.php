@@ -13,12 +13,12 @@
 		$minutes = 0;
 		$which = '';
 
-		if ($model->getFeeding()->getBreastLeft() > 0) {
+		if (!is_null($model->getFeeding()->getBreastLeft())) {
 			$minutes = $model->getFeeding()->getBreastLeft();
 			$which = 'left';
 		}
 
-		else if ($model->getFeeding()->getBreastRight() > 0) {
+		else if (!is_null($model->getFeeding()->getBreastRight())) {
 			$minutes = $model->getFeeding()->getBreastRight();
 			$which = 'right';
 		}
@@ -54,7 +54,7 @@
 				<button id="pause" class="btn btn-block btn-primary btn-lg"><span class="glyphicon glyphicon-pause"></span></button>
 			</div>
 
-			<div class="col-md-12">
+			<div class="col-md-12 hidden">
 				<button id="play" class="btn btn-block btn-primary btn-lg"><span class="glyphicon glyphicon-play"></span></button>
 			</div>
 		</div>

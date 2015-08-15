@@ -16,22 +16,19 @@ class BreastInputPostController extends InputPostControllerBase
 
 		$totalMinutes = $request->post('totalMinutes', 0);
 
-		if ($totalMinutes > 0)
+		$whichBoob = strtolower($whichBoob);
+		switch ($whichBoob)
 		{
-			$whichBoob = strtolower($whichBoob);
-			switch ($whichBoob)
-			{
-				case 'left':
-					$feeding->setBreastLeft($totalMinutes);
-					break;
+			case 'left':
+				$feeding->setBreastLeft($totalMinutes);
+				break;
 
-				case 'right':
-					$feeding->setBreastRight($totalMinutes);
-					break;
+			case 'right':
+				$feeding->setBreastRight($totalMinutes);
+				break;
 
-				default:
-					throw new Exception('Unknown boob '.$whichBoob);
-			}
+			default:
+				throw new Exception('Unknown boob '.$whichBoob);
 		}
 	}
 }
