@@ -61,7 +61,7 @@
 
 		<form id="breastForm" action="/breast">
 
-			<div class="row" id="totalMinutesRow">
+			<div class="row largeCenteredInput">
 				<div class="col-md-12">
 					<div class="form-group">
 						<label>

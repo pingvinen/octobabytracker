@@ -43,7 +43,7 @@
 
 		<form id="bottleForm" action="/bottle">
 
-			<div class="row">
+			<div class="row largeCenteredInput">
 				<div class="col-md-12">
 					<div class="form-group">
 						<label>
