@@ -11,6 +11,7 @@
 
 	var $counter = null;
 	var totalSeconds = 0;
+	var hiddenAt = null;
 
 	var interval = null;
 
@@ -27,10 +28,12 @@
 	}
 
 	function start() {
-		interval = window.setInterval(onTick, 1000);
+		if (interval === null) {
+			interval = window.setInterval(onTick, 1000);
 
-		$play.parent().hide();
-		$pause.parent().show();
+			$play.parent().hide();
+			$pause.parent().show();
+		}
 	}
 
 	function setActiveBoob(which) {
@@ -85,6 +88,23 @@
 		updateCounter();
 	}
 
+	function onVisibilityChange() {
+		if (window.pageVisibility.isHidden()) {
+			if (interval !== null) {
+				hiddenAt = new Date();
+				pause();
+			}
+		}
+		else {
+			if (hiddenAt !== null) {
+				var now = new Date();
+				updateTotalSeconds(totalSeconds + Math.ceil(((now.getTime() - hiddenAt.getTime()) / 1000)));
+				hiddenAt = null;
+				start();
+			}
+		}
+	}
+
 	$(function() {
 
 		$beginLeft = $('#beginLeft');
@@ -110,9 +130,7 @@
 		};
 
 		if (window.pageVisibility) {
-			window.pageVisibility.attachVisibilityChangeListener(function(event) {
-				console.log('visibility changed');
-			});
+			window.pageVisibility.attachVisibilityChangeListener(onVisibilityChange);
 		}
 
 		$beginLeft.on('click', function() {
