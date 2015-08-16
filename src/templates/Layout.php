@@ -69,6 +69,7 @@
 <script src="/assets/js/external/jquery-ui.min.js"></script>
 <script src="/assets/js/external/bootstrap.min.js"></script>
 <script src="/assets/js/fixbrowserinconsistencies.js"></script>
+<script src="/assets/js/lib/pagevisibility.js"></script>
 <script src="/assets/js/lib/viewport.js"></script>
 <script src="/assets/js/lib/ajax.js"></script>
 <script src="/assets/js/lib/form.js"></script>

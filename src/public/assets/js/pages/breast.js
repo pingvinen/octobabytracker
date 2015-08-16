@@ -1,4 +1,4 @@
-(function ($, undefined) {
+(function($, undefined) {
 	"use strict";
 
 	var $beginLeft = null;
@@ -85,7 +85,7 @@
 		updateCounter();
 	}
 
-	$(function () {
+	$(function() {
 
 		$beginLeft = $('#beginLeft');
 		$beginRight = $('#beginRight');
@@ -109,8 +109,18 @@
 			}
 		};
 
-		$beginLeft.on('click', function() { begin('left'); });
-		$beginRight.on('click', function() { begin('right'); });
+		if (window.pageVisibility) {
+			window.pageVisibility.attachVisibilityChangeListener(function(event) {
+				console.log('visibility changed');
+			});
+		}
+
+		$beginLeft.on('click', function() {
+			begin('left');
+		});
+		$beginRight.on('click', function() {
+			begin('right');
+		});
 		$pause.on('click', pause);
 		$play.on('click', start);
 
