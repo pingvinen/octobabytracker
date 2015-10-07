@@ -3,5 +3,7 @@ h1{font-size:54px;line-height:60px;font-weight:bold}
 h2{font-size:24px;font-weight:bold}
 h3{font-size:16px;font-weight:bold;line-height:20px}
 .color-darkgreen{color:#38b567}
-@media print{#header{display:none}}.largeCenteredInput{text-align:center;padding-top:2em}.largeCenteredInput .form-control{font-size:2em;height:2em;text-align:center}
+@media print{#header{display:none}}.btn-block{margin-bottom:1em}
+.btn-block{padding-top:1.5em;padding-bottom:1.5em}
+.largeCenteredInput{text-align:center;padding-top:2em}.largeCenteredInput .form-control{font-size:2em;height:2em;text-align:center}
 #breast #counter{font-size:3em;text-align:center;padding-bottom:.2em;padding-top:.2em}
