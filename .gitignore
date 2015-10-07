@@ -3,3 +3,4 @@ src/.idea/tasks.xml
 src/vendor/
 src/config/config.php
 src/local/
+src/dist/
