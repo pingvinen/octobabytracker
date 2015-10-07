@@ -11,9 +11,9 @@
 
 	var $counter = null;
 	var totalSeconds = 0;
-	var hiddenAt = null;
 
 	var interval = null;
+	var startedAt = null;
 
 	function begin(which) {
 		setActiveBoob(which);
@@ -23,6 +23,9 @@
 		window.clearInterval(interval);
 		interval = null;
 
+		updateTotalSeconds(getTotalSecondsNow());
+		startedAt = null;
+
 		$pause.parent().hide();
 		$play.parent().show();
 	}
@@ -30,6 +33,7 @@
 	function start() {
 		if (interval === null) {
 			interval = window.setInterval(onTick, 1000);
+			startedAt = new Date();
 
 			$play.parent().hide();
 			$pause.parent().show();
@@ -61,20 +65,29 @@
 		start();
 	}
 
-	function onTick() {
-		totalSeconds++;
-		updateCounter();
+	function getTotalSecondsNow() {
+		if (startedAt == null) {
+			return totalSeconds;
+		}
 
-		var minutes = Math.floor(totalSeconds / 60);
+		var sinceStart = Math.floor(((new Date()).getTime() - startedAt.getTime())/1000);
+		return totalSeconds + sinceStart;
+	}
+
+	function onTick() {
+		var tmpTotalSeconds = getTotalSecondsNow();
+		updateCounter(tmpTotalSeconds);
+
+		var minutes = Math.floor(tmpTotalSeconds / 60);
 		if (minutes > $totalMinutes.val()) {
 			$totalMinutes.val(minutes);
 			$totalMinutes.change();
 		}
 	}
 
-	function updateCounter() {
-		var minutes = Math.floor(totalSeconds / 60);
-		var seconds = totalSeconds - (minutes * 60);
+	function updateCounter(counterSeconds) {
+		var minutes = Math.floor(counterSeconds / 60);
+		var seconds = counterSeconds - (minutes * 60);
 
 		if (seconds < 10) {
 			seconds = '0' + seconds;
@@ -85,24 +98,7 @@
 
 	function updateTotalSeconds(newTotal) {
 		totalSeconds = newTotal;
-		updateCounter();
-	}
-
-	function onVisibilityChange() {
-		if (window.pageVisibility.isHidden()) {
-			if (interval !== null) {
-				hiddenAt = new Date();
-				pause();
-			}
-		}
-		else {
-			if (hiddenAt !== null) {
-				var now = new Date();
-				updateTotalSeconds(totalSeconds + Math.ceil(((now.getTime() - hiddenAt.getTime()) / 1000)));
-				hiddenAt = null;
-				start();
-			}
-		}
+		updateCounter(totalSeconds);
 	}
 
 	$(function() {
@@ -116,7 +112,12 @@
 		$play = $('#play');
 
 		window.breastForm_onChange = function(e) {
-			totalSeconds = $totalMinutes.val() * 60;
+			if (startedAt != null) {
+				// we need this, otherwise the seconds goes haywire
+				startedAt = new Date();
+			}
+			// we need this in case the user manually changed the field
+			updateTotalSeconds($totalMinutes.val() * 60);
 
 			if (window.breastForm_form) { // if called during "boot", the form may not be defined yet as ajaxify runs after this script
 				window.breastForm_form.submit();
@@ -128,10 +129,6 @@
 				window.location = '/';
 			}
 		};
-
-		if (window.pageVisibility) {
-			window.pageVisibility.attachVisibilityChangeListener(onVisibilityChange);
-		}
 
 		$beginLeft.on('click', function() {
 			begin('left');
