@@ -1,7 +1,7 @@
 body{background-color:#fff;font-family:verdana,arial,helvetica,sans-serif;color:#1a1a1a;padding-top:70px}
-h1{font-size:54px;line-height:60px;font-weight:bold}
-h2{font-size:24px;font-weight:bold}
-h3{font-size:16px;font-weight:bold;line-height:20px}
+h1{font-size:3em;font-weight:bold}
+h2{font-size:2em;font-weight:bold}
+h3{font-size:1.5em;font-weight:bold}
 .color-darkgreen{color:#38b567}
 @media print{#header{display:none}}.btn-block{margin-bottom:1em}
 .btn-block{padding-top:1.5em;padding-bottom:1.5em}
