@@ -38,12 +38,12 @@
         </exec>
     </target>
 
-    <target name="ensuredist">
+    <target name="-ensuredist">
         <delete dir="${dist}" />
         <mkdir dir="${dist}" />
     </target>
 
-    <target name="build" depends="ensuredist, revision, version, composerinstall">
+    <target name="build" depends="-checkForChanges, -ensuredist, revision, version, composerinstall">
         <tar longfile="gnu" compression="gzip" destfile="${dist}/${ant.project.name}_${version}_${revision}.tgz">
             <tarfileset dir="." id="altanomics.basefiles" prefix="${version}_${revision}/">
                 <include name="**/*.php" />
@@ -56,5 +56,59 @@
                 <exclude name="vendor/slim/slim/tests/**/*" />
             </tarfileset>
         </tar>
+    </target>
+
+    <target name="-distLatest">
+        <fail message="Package file does not exist">
+            <condition>
+                <or>
+                    <not><available file="${dist}" type="dir" /></not>
+                    <resourcecount count="0">
+                        <fileset dir="${dist}" includes="*.tgz" />
+                    </resourcecount>
+                </or>
+            </condition>
+        </fail>
+
+        <!-- read your fileset into a property formatted as a list of lines -->
+        <pathconvert property="file.list" pathsep="${line.separator}">
+            <map from="${basedir}${file.separator}" to=""/>
+            <fileset dir="${basedir}">
+                <include name="${dist}/*.tgz"/>
+            </fileset>
+        </pathconvert>
+
+        <!-- extract a single target file from the list -->
+        <loadresource property="dist.latest">
+            <string value="${file.list}"/>
+            <filterchain>
+                <tailfilter lines="1"/>
+            </filterchain>
+        </loadresource>
+    </target>
+
+    <target name="deploy" depends="-distLatest">
+        <input message="Where should I send the package? (host)" addproperty="scp.host" />
+        <input message="What username should I use?" addproperty="scp.user" />
+
+        <exec executable="scp">
+            <arg value="${dist.latest}" />
+            <arg value="${scp.user}@${scp.host}:/tmp" />
+        </exec>
+    </target>
+
+    <target name="-checkForChanges">
+        <exec outputProperty="git.st" executable="git">
+            <arg value="status" />
+            <arg value="--porcelain" />
+        </exec>
+
+        <echo message="${git.st}" />
+
+        <fail message="You have local changes!">
+            <condition>
+                <matches pattern="" string="${git.st}" />
+            </condition>
+        </fail>
     </target>
 </project>
