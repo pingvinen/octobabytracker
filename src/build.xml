@@ -107,7 +107,7 @@
 
         <fail message="You have local changes!">
             <condition>
-                <matches pattern="" string="${git.st}" />
+                <not><equals arg1="${git.st}" arg2="" /></not>
             </condition>
         </fail>
     </target>
