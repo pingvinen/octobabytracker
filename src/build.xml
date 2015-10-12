@@ -47,6 +47,8 @@
         <tar longfile="gnu" compression="gzip" destfile="${dist}/${ant.project.name}_${version}_${revision}.tgz">
             <tarfileset dir="." id="altanomics.basefiles" prefix="${version}_${revision}/">
                 <include name="**/*.php" />
+                <include name="config/config.php-dist" />
+                
                 <exclude name="config/config.php" />
 
                 <include name="public/assets/**/*" />
@@ -95,6 +97,8 @@
             <arg value="${dist.latest}" />
             <arg value="${scp.user}@${scp.host}:/tmp" />
         </exec>
+
+        <echo message="Uploaded ${dist.latest} to ${scp.host}:/tmp" />
     </target>
 
     <target name="-checkForChanges">
