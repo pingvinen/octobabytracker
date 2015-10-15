@@ -17,10 +17,6 @@
 			</div>
 		</div>
 
-		<div class="row visible-lg">
-			<div class="col-md-12"><br><br></div>
-		</div>
-
 		<div class="row">
 			<div class="col-sm-6">
 				<a href="/diaper" class="btn btn-primary btn-lg btn-block">Diaper</a>

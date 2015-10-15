@@ -1,0 +1,116 @@
+<project name="BabyTracker" default="build">
+
+    <property name="dist" value="dist" />
+
+    <target name="revision" description="Store git revision in ${revision}">
+        <exec executable="git" outputproperty="revision" failifexecutionfails="true" errorproperty="">
+            <arg value="describe"/>
+            <arg value="--tags"/>
+            <arg value="--always"/>
+            <arg value="HEAD"/>
+        </exec>
+        <condition property="repository.version" value="${git.revision}" else="unknown">
+            <and>
+                <isset property="git.revision"/>
+                <length string="${git.revision}" trim="yes" length="0" when="greater"/>
+            </and>
+        </condition>
+    </target>
+
+    <target name="version">
+        <exec executable="git" outputProperty="git.lastcommitdate.ci" failifexecutionfails="true">
+            <arg value="log" />
+            <arg value="-1" />
+            <arg value="--format=%ci" />
+        </exec>
+
+        <exec executable="date" outputProperty="version" failifexecutionfails="true">
+            <arg value="+%Y%m%d_%H%M%S" />
+            <arg value="-d" />
+            <arg value="${git.lastcommitdate.ci}" />
+        </exec>
+    </target>
+
+    <target name="composerinstall">
+        <exec executable="composer" failifexecutionfails="true">
+            <arg value="install"/>
+            <arg value="--no-dev"/>
+        </exec>
+    </target>
+
+    <target name="-ensuredist">
+        <delete dir="${dist}" />
+        <mkdir dir="${dist}" />
+    </target>
+
+    <target name="build" depends="-checkForChanges, -ensuredist, revision, version, composerinstall">
+        <tar longfile="gnu" compression="gzip" destfile="${dist}/${ant.project.name}_${version}_${revision}.tgz">
+            <tarfileset dir="." id="altanomics.basefiles" prefix="${version}_${revision}/">
+                <include name="**/*.php" />
+                <include name="config/config.php-dist" />
+                
+                <exclude name="config/config.php" />
+
+                <include name="public/assets/**/*" />
+
+                <exclude name="vendor/anneks/rightaboutnow/tasks/**/*" />
+                <exclude name="vendor/anneks/rightaboutnow/tests/**/*" />
+                <exclude name="vendor/slim/slim/tests/**/*" />
+            </tarfileset>
+        </tar>
+    </target>
+
+    <target name="-distLatest">
+        <fail message="Package file does not exist">
+            <condition>
+                <or>
+                    <not><available file="${dist}" type="dir" /></not>
+                    <resourcecount count="0">
+                        <fileset dir="${dist}" includes="*.tgz" />
+                    </resourcecount>
+                </or>
+            </condition>
+        </fail>
+
+        <!-- read your fileset into a property formatted as a list of lines -->
+        <pathconvert property="file.list" pathsep="${line.separator}">
+            <map from="${basedir}${file.separator}" to=""/>
+            <fileset dir="${basedir}">
+                <include name="${dist}/*.tgz"/>
+            </fileset>
+        </pathconvert>
+
+        <!-- extract a single target file from the list -->
+        <loadresource property="dist.latest">
+            <string value="${file.list}"/>
+            <filterchain>
+                <tailfilter lines="1"/>
+            </filterchain>
+        </loadresource>
+    </target>
+
+    <target name="deploy" depends="-distLatest">
+        <input message="Where should I send the package? (host)" addproperty="scp.host" />
+        <input message="What username should I use?" addproperty="scp.user" />
+
+        <exec executable="scp">
+            <arg value="${dist.latest}" />
+            <arg value="${scp.user}@${scp.host}:/tmp" />
+        </exec>
+
+        <echo message="Uploaded ${dist.latest} to ${scp.host}:/tmp" />
+    </target>
+
+    <target name="-checkForChanges">
+        <exec outputProperty="git.st" executable="git">
+            <arg value="status" />
+            <arg value="--porcelain" />
+        </exec>
+
+        <fail message="You have local changes!">
+            <condition>
+                <not><equals arg1="${git.st}" arg2="" /></not>
+            </condition>
+        </fail>
+    </target>
+</project>
