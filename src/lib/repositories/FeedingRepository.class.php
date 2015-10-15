@@ -153,12 +153,8 @@ class FeedingRepository
 
 	protected function insert(Feeding $feeding)
 	{
-		DebugLog::log('1');
 		$feeding->setId($this->uuidHelper->get());
-		DebugLog::log('2');
 
-
-		DebugLog::log('3');
 		$this->dbFactory->getConnection()->update(
 			"insert into feedings set
 				  `id`=:id
@@ -182,7 +178,5 @@ class FeedingRepository
 				, 'bottle' => $feeding->hasBottle() ? $feeding->getBottle()->encode() : null
 			)
 		);
-
-		DebugLog::log('4');
 	}
 }
