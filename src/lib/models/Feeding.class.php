@@ -21,13 +21,13 @@ class Feeding
 	private $status;
 
 	/**
-	 * Time on left breast in minutes
+	 * Time on left breast in seconds
 	 * @var int
 	 */
 	private $breastLeft;
 
 	/**
-	 * Time on right breast in minutes
+	 * Time on right breast in seconds
 	 * @var int
 	 */
 	private $breastRight;
@@ -174,5 +174,29 @@ class Feeding
 	public function hasId()
 	{
 		return !is_null($this->id);
+	}
+
+	public function addSecondsToBreastFeeding($additionalSeconds)
+	{
+		if (!is_null($this->breastLeft))
+		{
+			$this->breastLeft = bcadd($this->breastLeft, $additionalSeconds);
+		}
+		else
+		{
+			$this->breastRight = bcadd($this->breastRight, $additionalSeconds);
+		}
+	}
+
+	public function getBreastInSeconds()
+	{
+		if (!is_null($this->breastLeft))
+		{
+			return $this->breastLeft;
+		}
+		else
+		{
+			return $this->breastRight;
+		}
 	}
 }

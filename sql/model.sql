@@ -12,3 +12,11 @@ CREATE TABLE `feedings` (
   PRIMARY KEY (`id`),
   INDEX `feedings_datetime_idx` (`date_time` ASC)
 );
+
+CREATE TABLE `timings` (
+  `id` CHAR(40) NOT NULL,
+  `feeding_id` CHAR(40) NOT NULL,
+  `started_at` DATETIME NULL,
+  PRIMARY KEY (`id`),
+  INDEX `timings_feedingid_idx` (`feeding_id` ASC)
+);

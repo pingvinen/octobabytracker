@@ -10,16 +10,16 @@
 <?php $this->setBlock('body', function() use ($model) { ?>
 	<?php /** @var $this HtmlSlimView */ ?>
 	<?php
-		$minutes = 0;
+		$seconds = 0;
 		$which = '';
 
 		if (!is_null($model->getFeeding()->getBreastLeft())) {
-			$minutes = $model->getFeeding()->getBreastLeft();
+			$seconds = $model->getFeeding()->getBreastLeft();
 			$which = 'left';
 		}
 
 		else if (!is_null($model->getFeeding()->getBreastRight())) {
-			$minutes = $model->getFeeding()->getBreastRight();
+			$seconds = $model->getFeeding()->getBreastRight();
 			$which = 'right';
 		}
 	?>
@@ -66,7 +66,8 @@
 					<div class="form-group">
 						<label>
 							Minutes<br>
-							<input type="number" class="form-control js-form-trigger-submit" name="totalMinutes" value="<?php echo $minutes ?>">
+							<input type="number" class="form-control js-form-trigger-submit" name="totalMinutes" value="<?php echo floor(bcdiv($seconds, 60)) ?>">
+							<input type="hidden" name="totalSeconds" value="<?php echo $seconds ?>">
 						</label>
 					</div>
 				</div>

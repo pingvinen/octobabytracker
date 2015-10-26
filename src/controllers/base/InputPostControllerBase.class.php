@@ -10,11 +10,20 @@ abstract class InputPostControllerBase
 	 * @var FeedingRepository
 	 */
 	protected $feedingRepository;
+	/**
+	 * @var TimingRepository
+	 */
+	protected $timingRepository;
 
-	public function __construct(InputAjaxViewModel $model, FeedingRepository $feedingRepository)
+	public function __construct(
+		  InputAjaxViewModel $model
+		, FeedingRepository $feedingRepository
+		, TimingRepository $timingRepository
+	)
 	{
 		$this->model = $model;
 		$this->feedingRepository = $feedingRepository;
+		$this->timingRepository = $timingRepository;
 	}
 
 	public function execute(IWebRequest $request, IWebResponse $response)
@@ -27,6 +36,8 @@ abstract class InputPostControllerBase
 		{
 			$feeding->setStatus(Feeding::STATUS_Finalized);
 			$this->model->setStatus($feeding->getStatus());
+
+			$this->timingRepository->deleteForFeeding($feeding->getId());
 		}
 
 		$this->feedingRepository->save($feeding);

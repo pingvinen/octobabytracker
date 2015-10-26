@@ -15,16 +15,17 @@ class BreastInputPostController extends InputPostControllerBase
 		}
 
 		$totalMinutes = $request->post('totalMinutes', 0);
+		$totalSeconds = bcmul($totalMinutes, 60);
 
 		$whichBoob = strtolower($whichBoob);
 		switch ($whichBoob)
 		{
 			case 'left':
-				$feeding->setBreastLeft($totalMinutes);
+				$feeding->setBreastLeft($totalSeconds);
 				break;
 
 			case 'right':
-				$feeding->setBreastRight($totalMinutes);
+				$feeding->setBreastRight($totalSeconds);
 				break;
 
 			default:

@@ -8,39 +8,88 @@
 
 	var $whichBoob = null;
 	var $totalMinutes = null;
+	var $totalSeconds = null;
 
 	var $counter = null;
-	var totalSeconds = 0;
 
 	var interval = null;
+	/**
+	 * @type {Date}
+	 */
 	var startedAt = null;
+	var totalSeconds = 0;
 
 	function begin(which) {
-		setActiveBoob(which);
+		setActiveBoob(which, true);
 	}
 
 	function pause() {
+		window.ajax.send('POST', '/breast/timing/stop', {})
+			.done(function(response) {
+				updateCounter(Number(response.totalSeconds));
+				totalSeconds = Number(response.totalSeconds);
+			});
+
 		window.clearInterval(interval);
 		interval = null;
+		showPlay();
+	}
 
-		updateTotalSeconds(getTotalSecondsNow());
-		startedAt = null;
-
+	function showPlay() {
 		$pause.parent().hide();
 		$play.parent().show();
 	}
 
 	function start() {
-		if (interval === null) {
-			interval = window.setInterval(onTick, 1000);
-			startedAt = new Date();
+		window.ajax.send('POST', '/breast/timing/start', {'whichBoob': $whichBoob.val()})
+			.done(function(response) {
+				updateCounter(response.totalSeconds);
 
-			$play.parent().hide();
-			$pause.parent().show();
+				if (interval === null) {
+					interval = window.setInterval(onTick, 1000);
+					startedAt = new Date();
+
+					$play.parent().hide();
+					$pause.parent().show();
+				}
+			});
+	}
+
+	function onTick() {
+		var now = new Date();
+
+		var seconds = Number(Math.floor((now.getTime() - startedAt.getTime()) / 1000));
+
+		updateCounter(totalSeconds + seconds);
+		updateTotalMinutes(totalSeconds + seconds);
+	}
+
+	function getMinutesAndSeconds(counterSeconds) {
+		var minutes = Math.floor(counterSeconds / 60);
+		var seconds = counterSeconds - (minutes * 60);
+
+		return { minutes: Number(minutes), seconds: Number(seconds) };
+	}
+
+	function updateCounter(counterSeconds) {
+		var minSecs = getMinutesAndSeconds(counterSeconds);
+
+		if (minSecs.seconds < 10) {
+			minSecs.seconds = '0' + minSecs.seconds;
+		}
+
+		$counter.html(minSecs.minutes + ':' + minSecs.seconds);
+	}
+
+	function updateTotalMinutes(counterSeconds) {
+		var minSecs = getMinutesAndSeconds(counterSeconds);
+
+		if (minSecs.minutes != $totalMinutes.val()) {
+			$totalMinutes.val(minSecs.minutes);
 		}
 	}
 
-	function setActiveBoob(which) {
+	function setActiveBoob(which, doStart) {
 		var $elm = null;
 
 		switch (which) {
@@ -62,44 +111,12 @@
 		$elm.removeClass('btn-primary').addClass('btn-success');
 
 		window.breastForm_onChange();
-		start();
-	}
 
-	function getTotalSecondsNow() {
-		if (startedAt == null) {
-			return totalSeconds;
-		}
-
-		var sinceStart = Math.floor(((new Date()).getTime() - startedAt.getTime())/1000);
-		return totalSeconds + sinceStart;
-	}
-
-	function onTick() {
-		var tmpTotalSeconds = getTotalSecondsNow();
-		updateCounter(tmpTotalSeconds);
-
-		var minutes = Math.floor(tmpTotalSeconds / 60);
-		if (minutes > $totalMinutes.val()) {
-			$totalMinutes.val(minutes);
-			$totalMinutes.change();
+		if (doStart) {
+			start();
 		}
 	}
 
-	function updateCounter(counterSeconds) {
-		var minutes = Math.floor(counterSeconds / 60);
-		var seconds = counterSeconds - (minutes * 60);
-
-		if (seconds < 10) {
-			seconds = '0' + seconds;
-		}
-
-		$counter.html(minutes + ':' + seconds);
-	}
-
-	function updateTotalSeconds(newTotal) {
-		totalSeconds = newTotal;
-		updateCounter(totalSeconds);
-	}
 
 	$(function() {
 
@@ -107,17 +124,14 @@
 		$beginRight = $('#beginRight');
 		$counter = $('#counter');
 		$totalMinutes = $(document.forms['breastForm']).find('[name="totalMinutes"]');
+		$totalSeconds = $(document.forms['breastForm']).find('[name="totalSeconds"]');
 		$whichBoob = $(document.forms['breastForm']).find('[name="whichBoob"]');
 		$pause = $('#pause');
 		$play = $('#play');
 
 		window.breastForm_onChange = function(e) {
-			if (startedAt != null) {
-				// we need this, otherwise the seconds goes haywire
-				startedAt = new Date();
-			}
 			// we need this in case the user manually changed the field
-			updateTotalSeconds($totalMinutes.val() * 60);
+			//updateTotalSeconds($totalMinutes.val() * 60);
 
 			if (window.breastForm_form) { // if called during "boot", the form may not be defined yet as ajaxify runs after this script
 				window.breastForm_form.submit();
@@ -142,14 +156,16 @@
 		$pause.attr('disabled', 'disabled');
 		$play.parent().hide().removeClass('hidden'); // the "hidden" class prevents "blink" on page load
 
-		if ($totalMinutes.val() > 0) {
-			updateTotalSeconds($totalMinutes.val() * 60);
+		if ($totalSeconds.val() > 0) {
+			updateCounter($totalSeconds.val());
+			totalSeconds = Number($totalSeconds.val());
 		}
 
 		if ($whichBoob.val() === 'left' || $whichBoob.val() === 'right') {
-			setActiveBoob($whichBoob.val());
-			pause();
+			setActiveBoob($whichBoob.val(), false);
 		}
+
+		showPlay();
 	});
 
 })(jQuery);
