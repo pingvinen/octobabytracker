@@ -12,6 +12,8 @@ $app = new \Slim\Slim(array(
 $app->add($container->getAjaxRequestMiddleware());
 $app->add($container->getViewPickerMiddleware());
 
+DebugLog::log($app->request->getPath());
+
 /**
  * @var $routeSetter RouteSetter
  */

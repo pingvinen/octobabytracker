@@ -35,8 +35,10 @@
 
 	Form.prototype.ajaxify = function() {
 		var that = this;
-		this.$form.on('submit', function(e) {
-			e.preventDefault();
+		this.$form.on('submit', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+			event.returnValue = false;
 
 			//
 			// try to call custom handler
@@ -44,8 +46,8 @@
 			var onSubmitName = that.getCustomHandlerName('onSubmit');
 
 			if ($.isFunction(window[onSubmitName])) {
-				window[onSubmitName](e);
-				return;
+				window[onSubmitName](event);
+				return false;
 			}
 
 			//
@@ -64,6 +66,8 @@
 			else {
 				window.ajax.send(method, url, data);
 			}
+
+			return false;
 		});
 	};
 

@@ -113,7 +113,7 @@
 		window.breastForm_onChange();
 
 		if (doStart) {
-			start();
+		//	start();
 		}
 	}
 
@@ -140,7 +140,7 @@
 
 		window.breastForm_onAfterSubmit = function(responseBody) {
 			if (responseBody.status && responseBody.status === 'finalized') {
-				window.location = '/';
+				//window.location = '/';
 			}
 		};
 
